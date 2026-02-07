@@ -295,7 +295,7 @@ def gerar_pdf_relatorio(nome_local, lat, lon, data_ini, data_fim,
     y -= 20
 
 
-    # =========================
+        # =========================
     # 4) RESULTADOS
     # =========================
     c.setFont("Helvetica-Bold", 13)
@@ -305,7 +305,7 @@ def gerar_pdf_relatorio(nome_local, lat, lon, data_ini, data_fim,
     y -= 22
     
     # -------------------------
-    # Diagnóstico do período
+    # Diagnóstico
     # -------------------------
     c.setFont("Helvetica-Bold", 11)
     c.drawString(40, y, "Diagnóstico do período:")
@@ -313,20 +313,23 @@ def gerar_pdf_relatorio(nome_local, lat, lon, data_ini, data_fim,
     c.setFont("Helvetica", 11)
     
     diag_txt = "" if diag_texto is None else str(diag_texto)
-    diag_txt = " ".join(diag_txt.split())  # remove quebras e espaços duplicados
+    diag_txt = " ".join(diag_txt.split())  # limpa espaços extras
     
-    frases_diag = diag_txt.split(".")
+    # QUEBRA SOMENTE EM ". " (ponto final de frase)
+    frases_diag = diag_txt.split(". ")
     
     for frase in frases_diag[:3]:
         frase = frase.strip()
         if frase:
-            c.drawString(50, y, frase + ".")
+            if not frase.endswith("."):
+                frase += "."
+            c.drawString(50, y, frase)
             y -= 14
     
     y -= 10
     
     # -------------------------
-    # Frequência no período
+    # Frequência
     # -------------------------
     c.setFont("Helvetica-Bold", 11)
     c.drawString(40, y, "Frequência no período:")
@@ -341,7 +344,7 @@ def gerar_pdf_relatorio(nome_local, lat, lon, data_ini, data_fim,
     y -= 18
     
     # -------------------------
-    # Recomendação principal
+    # Recomendação
     # -------------------------
     c.setFont("Helvetica-Bold", 11)
     c.drawString(40, y, "Recomendação principal:")
@@ -351,13 +354,16 @@ def gerar_pdf_relatorio(nome_local, lat, lon, data_ini, data_fim,
     rec_txt = recomendacao_por_classe(classe_media)
     rec_txt = " ".join(rec_txt.split())
     
-    frases_rec = rec_txt.split(".")
+    frases_rec = rec_txt.split(". ")
     
     for frase in frases_rec[:3]:
         frase = frase.strip()
         if frase:
-            c.drawString(50, y, frase + ".")
+            if not frase.endswith("."):
+                frase += "."
+            c.drawString(50, y, frase)
             y -= 14
+
 
     # =========================
     # 5) GRÁFICO
@@ -605,6 +611,7 @@ if st.button("🔍 Analisar Conforto Térmico"):
         file_name="DairyClime_Relatorio.pdf",
         mime="application/pdf"
     )
+
 
 
 
