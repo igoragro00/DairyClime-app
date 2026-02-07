@@ -309,13 +309,16 @@ def gerar_pdf_relatorio(nome_local, lat, lon, data_ini, data_fim,
     y -= 16
     c.setFont("Helvetica", 11)
 
-    # Diagnóstico em até 3 linhas, quebrado por frases
+    # Diagnóstico do período: 3 linhas (quebra por frases, sem cortar palavra)
+    diag_texto = "" if diag_texto is None else str(diag_texto)
+    diag_texto = " ".join(diag_texto.split())  # remove \n e espaços duplicados
+    
     frases = [f.strip() for f in diag_texto.split(".") if f.strip()]
     
+    # Garante no máximo 3 linhas e coloca ponto final
     for frase in frases[:3]:
         c.drawString(50, y, frase + ".")
         y -= 14
-
 
     y -= 10
     c.setFont("Helvetica-Bold", 11)
@@ -585,6 +588,7 @@ if st.button("🔍 Analisar Conforto Térmico"):
         file_name="DairyClime_Relatorio.pdf",
         mime="application/pdf"
     )
+
 
 
 
