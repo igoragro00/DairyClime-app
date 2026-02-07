@@ -320,7 +320,7 @@ def gerar_pdf_relatorio(nome_local, lat, lon, data_ini, data_fim,
     # 2) colocar nova página e desenhar imagem
     c.showPage()
     c.setFont("Helvetica-Bold", 14)
-    c.drawString(40, h - 50, "Gráfico do ITU (Índice de Temperatura e Umidade)"
+    c.drawString(40, h - 50, "Gráfico do ITU (Índice de Temperatura e Umidade)")
 
     img = ImageReader(img_buf)
 
@@ -550,6 +550,7 @@ if st.button("🔍 Analisar Conforto Térmico"):
         file_name="DairyClime_Relatorio.pdf",
         mime="application/pdf"
     )
+
 
 
 
