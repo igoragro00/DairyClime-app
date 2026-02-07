@@ -18,6 +18,24 @@ from reportlab.pdfgen import canvas
 from reportlab.lib.pagesizes import A4
 from reportlab.lib.utils import ImageReader
 
+import textwrap
+
+def draw_wrapped_text(c, text, x, y, max_width=90, leading=14, font="Helvetica", size=10):
+    """
+    Escreve texto no PDF com quebra automática de linha.
+    Retorna o novo valor de y após desenhar o texto.
+    """
+    c.setFont(font, size)
+    text_obj = c.beginText(x, y)
+    text_obj.setLeading(leading)
+
+    linhas = textwrap.wrap(text, width=max_width) if text else []
+    for linha in linhas:
+        text_obj.textLine(linha)
+
+    c.drawText(text_obj)
+    return y - (len(linhas) * leading)
+
 # ============================================================
 # CONFIG
 # ============================================================
@@ -532,6 +550,7 @@ if st.button("🔍 Analisar Conforto Térmico"):
         file_name="DairyClime_Relatorio.pdf",
         mime="application/pdf"
     )
+
 
 
 
