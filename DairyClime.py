@@ -224,7 +224,7 @@ def plot_barras_itu(df_plot, titulo, altura=4.2, largura=9.2):
     plt.tight_layout()
     return fig
 
-    def gerar_pdf_relatorio(nome_local, lat, lon, data_ini, data_fim,
+def gerar_pdf_relatorio(nome_local, lat, lon, data_ini, data_fim,
                         media_itu, classe_media, diag_texto,
                         p_alerta, p_perigo, p_emerg,
                         fig_matplotlib):
@@ -580,6 +580,7 @@ if st.button("🔍 Analisar Conforto Térmico"):
         file_name="DairyClime_Relatorio.pdf",
         mime="application/pdf"
     )
+
 
 
 
