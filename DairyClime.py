@@ -248,6 +248,7 @@ def gerar_pdf_relatorio(nome_local, lat, lon, data_ini, data_fim,
     w, h = A4
 
     y = h - 50
+                            
 
        # =========================
     # Cabeçalho
@@ -255,8 +256,31 @@ def gerar_pdf_relatorio(nome_local, lat, lon, data_ini, data_fim,
     c.setFont("Helvetica-Bold", 16)
     c.drawString(40, y, "DairyClime – Relatório de Conforto Térmico (Vacas de Leite)")
     y -= 30
+                            
+           # =========================
+    # 2) IDENTIFICAÇÃO DO LOCAL E PERÍODO
+    # =========================
+    c.setFont("Helvetica", 11)
     
-    texto_institucional = (
+    c.drawString(40, y, f"Local: {nome_local}")
+    y -= 16
+    
+    c.drawString(
+        40,
+        y,
+        f"Coordenadas: Latitude {lat:.3f} | Longitude {lon:.3f}"
+    )
+    y -= 16
+    
+    c.drawString(
+        40,
+        y,
+        f"Período analisado: {data_ini.strftime('%d/%m/%Y')} a {data_fim.strftime('%d/%m/%Y')}"
+    )
+    y -= 25
+                         
+    
+        texto_institucional = (
         "DairyClime é um aplicativo desenvolvido no âmbito de projetos de ensino, pesquisa "
         "e extensão universitária, vinculado à Universidade Federal do Maranhão (UFMA) e à UNESP, "
         "com apoio de laboratórios e pesquisadores das áreas de Zootecnia e Ciências Agrárias. "
@@ -265,9 +289,16 @@ def gerar_pdf_relatorio(nome_local, lat, lon, data_ini, data_fim,
         "do estresse térmico."
     )
     
-    y = draw_wrapped_text(c, texto_institucional, x=40, y=y, max_width=90)
+    y = draw_justified_paragraph(
+        c,
+        texto_institucional,
+        x=40,
+        y=y,
+        width=520,   # largura útil da página A4
+        style=style_justificado
+    )
+    
     y -= 20
-
 
 
     # Destaque do resultado (tipo “card” simples)
@@ -550,6 +581,7 @@ if st.button("🔍 Analisar Conforto Térmico"):
         file_name="DairyClime_Relatorio.pdf",
         mime="application/pdf"
     )
+
 
 
 
