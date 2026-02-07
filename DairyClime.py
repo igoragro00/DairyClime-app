@@ -337,10 +337,14 @@ def gerar_pdf_relatorio(nome_local, lat, lon, data_ini, data_fim,
     y -= 16
     c.setFont("Helvetica", 11)
     rec = recomendacao_por_classe(classe_media)
+    
+    max_chars = 95  # <<< DEFINE AQUI (igual ao diagnóstico)
     linhas = [rec[i:i+max_chars] for i in range(0, len(rec), max_chars)]
+    
     for ln in linhas[:3]:
         c.drawString(50, y, ln)
         y -= 14
+
 
     # =========================
     # 5) GRÁFICO
@@ -588,6 +592,7 @@ if st.button("🔍 Analisar Conforto Térmico"):
         file_name="DairyClime_Relatorio.pdf",
         mime="application/pdf"
     )
+
 
 
 
