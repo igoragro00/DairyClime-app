@@ -231,18 +231,33 @@ def gerar_pdf_relatorio(nome_local, lat, lon, data_ini, data_fim,
 
     y = h - 50
 
-    # Cabeçalho
-    c.setFont("Helvetica-Bold", 16)
-    c.drawString(40, y, "DairyClime – Relatório de Conforto Térmico (Vacas de Leite)")
-    y -= 30
+   # =========================
+# Cabeçalho
+# =========================
+c.setFont("Helvetica-Bold", 16)
+c.drawString(40, y, "DairyClime – Relatório de Conforto Térmico (Vacas de Leite)")
+y -= 30
 
-    c.setFont("Helvetica", 11)
-    c.drawString(40, y, f"Local: {nome_local}")
-    y -= 16
-    c.drawString(40, y, f"Coordenadas: Latitude {lat} | Longitude {lon}")
-    y -= 16
-    c.drawString(40, y, f"Período: {data_ini.strftime('%d/%m/%Y')} a {data_fim.strftime('%d/%m/%Y')}")
-    y -= 24
+# Texto institucional do app
+c.setFont("Helvetica", 10)
+texto_descricao = (
+    "DairyClime é um aplicativo desenvolvido no âmbito de projetos de ensino, pesquisa "
+    "e extensão universitária, vinculado à Universidade Federal do Maranhão (UFMA) e à UNESP, "
+    "com apoio de laboratórios e pesquisadores das áreas de Zootecnia e Ciências Agrárias.\n\n"
+    "A ferramenta utiliza dados climáticos da NASA/POWER para avaliar o conforto térmico "
+    "de vacas de leite, auxiliando produtores e técnicos na tomada de decisão para o manejo "
+    "do estresse térmico."
+)
+
+text_obj = c.beginText(40, y)
+for linha in texto_descricao.split("\n"):
+    text_obj.textLine(linha)
+
+c.drawText(text_obj)
+
+# Ajuste do cursor vertical após o bloco
+y -= 70
+
 
     # Destaque do resultado (tipo “card” simples)
     c.setFont("Helvetica-Bold", 13)
@@ -524,3 +539,4 @@ if st.button("🔍 Analisar Conforto Térmico"):
         file_name="DairyClime_Relatorio.pdf",
         mime="application/pdf"
     )
+
