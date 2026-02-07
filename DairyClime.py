@@ -232,7 +232,6 @@ def plot_barras_itu(df_plot, titulo, altura=4.2, largura=9.2):
     plt.tight_layout()
     return fig
 
-
     def gerar_pdf_relatorio(nome_local, lat, lon, data_ini, data_fim,
                             media_itu, classe_media, diag_texto,
                             p_alerta, p_perigo, p_emerg,
@@ -248,8 +247,8 @@ def plot_barras_itu(df_plot, titulo, altura=4.2, largura=9.2):
         w, h = A4
     
         y = h - 50
-    
-        # =========================
+                                
+    # =========================
         # 1) CABEÇALHO
         # =========================
         c.setFont("Helvetica-Bold", 16)
@@ -299,9 +298,8 @@ def plot_barras_itu(df_plot, titulo, altura=4.2, largura=9.2):
             style=style_justificado
         )
     
-        y -= 20
-
-
+        y -= 20 
+       
     # Destaque do resultado (tipo “card” simples)
     c.setFont("Helvetica-Bold", 13)
     c.drawString(40, y, f"ITU médio do período: {media_itu:.1f}")
@@ -582,6 +580,7 @@ if st.button("🔍 Analisar Conforto Térmico"):
         file_name="DairyClime_Relatorio.pdf",
         mime="application/pdf"
     )
+
 
 
 
