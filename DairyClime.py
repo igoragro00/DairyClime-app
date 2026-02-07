@@ -295,7 +295,7 @@ def gerar_pdf_relatorio(nome_local, lat, lon, data_ini, data_fim,
     y -= 20
 
 
-    # =========================
+        # =========================
     # 4) RESULTADOS
     # =========================
     c.setFont("Helvetica-Bold", 13)
@@ -303,46 +303,57 @@ def gerar_pdf_relatorio(nome_local, lat, lon, data_ini, data_fim,
     y -= 18
     c.drawString(40, y, f"Classificação: {classe_media}")
     y -= 22
-
+    
+    # -------------------------
+    # Diagnóstico
+    # -------------------------
     c.setFont("Helvetica-Bold", 11)
     c.drawString(40, y, "Diagnóstico do período:")
     y -= 16
     c.setFont("Helvetica", 11)
-
-    # Diagnóstico do período: 3 linhas (quebra por frases, sem cortar palavra)
-    diag_texto = "" if diag_texto is None else str(diag_texto)
-    diag_texto = " ".join(diag_texto.split())  # remove \n e espaços duplicados
     
-    frases = [f.strip() for f in diag_texto.split(".") if f.strip()]
+    # Diagnóstico em até 3 linhas (quebra por frases)
+    diag_txt = "" if diag_texto is None else str(diag_texto)
+    diag_txt = " ".join(diag_txt.split())
     
-    # Garante no máximo 3 linhas e coloca ponto final
-    for frase in frases[:3]:
+    frases_diag = [f.strip() for f in diag_txt.split(".") if f.strip()]
+    
+    for frase in frases_diag[:3]:
         c.drawString(50, y, frase + ".")
         y -= 14
-
+    
     y -= 10
+    
+    # -------------------------
+    # Frequência
+    # -------------------------
     c.setFont("Helvetica-Bold", 11)
     c.drawString(40, y, "Frequência no período:")
     y -= 16
     c.setFont("Helvetica", 11)
+    
     c.drawString(50, y, f"Alerta: {p_alerta:.1f}% dos dias")
     y -= 14
     c.drawString(50, y, f"Perigo: {p_perigo:.1f}% dos dias")
     y -= 14
     c.drawString(50, y, f"Emergência: {p_emerg:.1f}% dos dias")
     y -= 18
-
+    
+    # -------------------------
+    # Recomendação
+    # -------------------------
     c.setFont("Helvetica-Bold", 11)
     c.drawString(40, y, "Recomendação principal:")
     y -= 16
     c.setFont("Helvetica", 11)
+    
     rec = recomendacao_por_classe(classe_media)
+    rec = " ".join(rec.split())
     
-    max_chars = 95  # <<< DEFINE AQUI (igual ao diagnóstico)
-    linhas = [rec[i:i+max_chars] for i in range(0, len(rec), max_chars)]
+    frases_rec = [f.strip() for f in rec.split(".") if f.strip()]
     
-    for ln in linhas[:3]:
-        c.drawString(50, y, ln)
+    for frase in frases_rec[:3]:
+        c.drawString(50, y, frase + ".")
         y -= 14
 
 
@@ -592,6 +603,7 @@ if st.button("🔍 Analisar Conforto Térmico"):
         file_name="DairyClime_Relatorio.pdf",
         mime="application/pdf"
     )
+
 
 
 
