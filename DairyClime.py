@@ -188,16 +188,11 @@ def preparar_df_plot(df, data_ini, data_fim):
 
 
 def plot_barras_itu(df_plot, titulo, altura=4.2, largura=9.2):
-    """
-    Retorna um matplotlib Figure com barras coloridas por classe
-    e valores centralizados em branco.
-    """
     fig, ax = plt.subplots(figsize=(largura, altura))
 
     cores = [cor_por_itu(v) for v in df_plot["ITU"]]
     bars = ax.bar(df_plot["Label"], df_plot["ITU"], color=cores)
 
-    # Linhas de referência
     ax.axhline(70, linestyle="--", linewidth=1)
     ax.axhline(78, linestyle="--", linewidth=1)
     ax.axhline(82, linestyle="--", linewidth=1)
@@ -205,7 +200,6 @@ def plot_barras_itu(df_plot, titulo, altura=4.2, largura=9.2):
     ax.set_title(titulo)
     ax.set_ylabel("ITU")
 
-    # Ajustes eixo X: não poluir
     max_labels = 18
     if len(df_plot) > max_labels:
         step = int(np.ceil(len(df_plot) / max_labels))
@@ -213,10 +207,8 @@ def plot_barras_itu(df_plot, titulo, altura=4.2, largura=9.2):
             if i % step != 0:
                 label.set_visible(False)
 
-    # Valores no meio da barra (branco + negrito)
     for bar, val in zip(bars, df_plot["ITU"]):
         h = bar.get_height()
-        # só escreve se a barra for “alta o suficiente” para não virar bagunça
         if h >= 10:
             ax.text(
                 bar.get_x() + bar.get_width()/2,
@@ -233,74 +225,76 @@ def plot_barras_itu(df_plot, titulo, altura=4.2, largura=9.2):
     return fig
 
     def gerar_pdf_relatorio(nome_local, lat, lon, data_ini, data_fim,
-                            media_itu, classe_media, diag_texto,
-                            p_alerta, p_perigo, p_emerg,
-                            fig_matplotlib):
-        """
-        Gera PDF e embute o gráfico (mesmas cores).
-        """
-        if nome_local is None or str(nome_local).strip() == "":
-            nome_local = "Local não informado"
-    
-        buffer = BytesIO()
-        c = canvas.Canvas(buffer, pagesize=A4)
-        w, h = A4
-    
-        y = h - 50
-                                
+                        media_itu, classe_media, diag_texto,
+                        p_alerta, p_perigo, p_emerg,
+                        fig_matplotlib):
+    """
+    Gera PDF e embute o gráfico (mesmas cores).
+    """
+    if nome_local is None or str(nome_local).strip() == "":
+        nome_local = "Local não informado"
+
+    buffer = BytesIO()
+    c = canvas.Canvas(buffer, pagesize=A4)
+    w, h = A4
+
+    y = h - 50
+
     # =========================
-        # 1) CABEÇALHO
-        # =========================
-        c.setFont("Helvetica-Bold", 16)
-        c.drawString(40, y, "DairyClime – Relatório de Conforto Térmico (Vacas de Leite)")
-        y -= 30
-    
-        # =========================
-        # 2) IDENTIFICAÇÃO DO LOCAL E PERÍODO
-        # =========================
-        c.setFont("Helvetica", 11)
-    
-        c.drawString(40, y, f"Local: {nome_local}")
-        y -= 16
-    
-        c.drawString(
-            40,
-            y,
-            f"Coordenadas: Latitude {lat:.3f} | Longitude {lon:.3f}"
-        )
-        y -= 16
-    
-        c.drawString(
-            40,
-            y,
-            f"Período analisado: {data_ini.strftime('%d/%m/%Y')} a {data_fim.strftime('%d/%m/%Y')}"
-        )
-        y -= 25
-    
-        # =========================
-        # 3) TEXTO INSTITUCIONAL
-        # =========================
-        texto_institucional = (
-            "DairyClime é um aplicativo desenvolvido no âmbito de projetos de ensino, pesquisa "
-            "e extensão universitária, vinculado à Universidade Federal do Maranhão (UFMA) e à UNESP, "
-            "com apoio de laboratórios e pesquisadores das áreas de Zootecnia e Ciências Agrárias. "
-            "A ferramenta utiliza dados climáticos da NASA/POWER para avaliar o conforto térmico "
-            "de vacas de leite, auxiliando produtores e técnicos na tomada de decisão para o manejo "
-            "do estresse térmico."
-        )
-    
-        y = draw_justified_paragraph(
-            c,
-            texto_institucional,
-            x=40,
-            y=y,
-            width=520,   # largura útil da página A4
-            style=style_justificado
-        )
-    
-        y -= 20 
-       
-    # Destaque do resultado (tipo “card” simples)
+    # 1) CABEÇALHO
+    # =========================
+    c.setFont("Helvetica-Bold", 16)
+    c.drawString(40, y, "DairyClime – Relatório de Conforto Térmico (Vacas de Leite)")
+    y -= 30
+
+    # =========================
+    # 2) IDENTIFICAÇÃO DO LOCAL E PERÍODO
+    # =========================
+    c.setFont("Helvetica", 11)
+
+    c.drawString(40, y, f"Local: {nome_local}")
+    y -= 16
+
+    c.drawString(
+        40,
+        y,
+        f"Coordenadas: Latitude {lat:.3f} | Longitude {lon:.3f}"
+    )
+    y -= 16
+
+    c.drawString(
+        40,
+        y,
+        f"Período analisado: {data_ini.strftime('%d/%m/%Y')} a {data_fim.strftime('%d/%m/%Y')}"
+    )
+    y -= 25
+
+    # =========================
+    # 3) TEXTO INSTITUCIONAL
+    # =========================
+    texto_institucional = (
+        "DairyClime é um aplicativo desenvolvido no âmbito de projetos de ensino, pesquisa "
+        "e extensão universitária, vinculado à Universidade Federal do Maranhão (UFMA) e à UNESP, "
+        "com apoio de laboratórios e pesquisadores das áreas de Zootecnia e Ciências Agrárias. "
+        "A ferramenta utiliza dados climáticos da NASA/POWER para avaliar o conforto térmico "
+        "de vacas de leite, auxiliando produtores e técnicos na tomada de decisão para o manejo "
+        "do estresse térmico."
+    )
+
+    y = draw_justified_paragraph(
+        c,
+        texto_institucional,
+        x=40,
+        y=y,
+        width=520,   # largura útil da página A4
+        style=style_justificado
+    )
+
+    y -= 20
+
+    # =========================
+    # 4) RESULTADOS
+    # =========================
     c.setFont("Helvetica-Bold", 13)
     c.drawString(40, y, f"ITU médio do período: {media_itu:.1f}")
     y -= 18
@@ -312,7 +306,6 @@ def plot_barras_itu(df_plot, titulo, altura=4.2, largura=9.2):
     y -= 16
     c.setFont("Helvetica", 11)
 
-    # Quebra de linha manual simples
     max_chars = 95
     linhas = [diag_texto[i:i+max_chars] for i in range(0, len(diag_texto), max_chars)]
     for ln in linhas[:4]:
@@ -341,25 +334,33 @@ def plot_barras_itu(df_plot, titulo, altura=4.2, largura=9.2):
         c.drawString(50, y, ln)
         y -= 14
 
-    # Inserir gráfico do app no PDF (mesmas cores/layout)
-    # 1) salvar fig em PNG em memória
+    # =========================
+    # 5) GRÁFICO
+    # =========================
     img_buf = BytesIO()
     fig_matplotlib.savefig(img_buf, format="png", dpi=200, bbox_inches="tight")
     img_buf.seek(0)
 
-    # 2) colocar nova página e desenhar imagem
     c.showPage()
     c.setFont("Helvetica-Bold", 14)
     c.drawString(40, h - 50, "Gráfico do ITU (Índice de Temperatura e Umidade)")
 
     img = ImageReader(img_buf)
-
-    # dimensões do gráfico no PDF
     img_w = w - 80
     img_h = 320
-    c.drawImage(img, 40, h - 50 - 20 - img_h, width=img_w, height=img_h, preserveAspectRatio=True, mask='auto')
+    c.drawImage(
+        img,
+        40,
+        h - 50 - 20 - img_h,
+        width=img_w,
+        height=img_h,
+        preserveAspectRatio=True,
+        mask='auto'
+    )
 
-    # Rodapé
+    # =========================
+    # 6) RODAPÉ
+    # =========================
     c.setFont("Helvetica", 9)
     c.drawString(40, 60, "Fonte dos dados: NASA POWER (dados diários; atraso médio ~4 dias; resolução ~55 km).")
     c.drawString(40, 48, "Fórmula do ITU: ITU = 0,8×Ta + (UR×(Ta−14,3))/100 + 46,3  |  Ta(°C)  UR(%).")
@@ -368,7 +369,6 @@ def plot_barras_itu(df_plot, titulo, altura=4.2, largura=9.2):
     c.save()
     buffer.seek(0)
     return buffer
-
 
 # ============================================================
 # SIDEBAR (melhorado e acessível)
@@ -580,6 +580,7 @@ if st.button("🔍 Analisar Conforto Térmico"):
         file_name="DairyClime_Relatorio.pdf",
         mime="application/pdf"
     )
+
 
 
 
