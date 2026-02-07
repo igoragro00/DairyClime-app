@@ -281,16 +281,16 @@ def gerar_pdf_relatorio(nome_local, lat, lon, data_ini, data_fim,
         "do estresse térmico."
     )
 
-    y = draw_justified_paragraph(
+        y = draw_wrapped_text(
         c,
         texto_institucional,
         x=40,
         y=y,
-        width=520,   # largura útil da página A4
-        style=style_justificado
+        max_width=95,   # largura visual adequada ao A4
+        leading=14,
+        font="Helvetica",
+        size=11
     )
-
-    y -= 20
 
     # =========================
     # 4) RESULTADOS
@@ -580,6 +580,7 @@ if st.button("🔍 Analisar Conforto Térmico"):
         file_name="DairyClime_Relatorio.pdf",
         mime="application/pdf"
     )
+
 
 
 
